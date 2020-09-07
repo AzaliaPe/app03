@@ -1,8 +1,9 @@
 const baseUrl = 'https://rickandmortyapi.com/api/';
 const characterList = document.getElementById('characters-list');
+const locationList = document.getElementById('locations-list');
 
 const GetCharactersList = async url =>{
-    // fetch(`${baseUrl}${url}`).then(res => console.log(res.json())); //Esto sirve para lo mismo que lo de abajo, pero aquí no se utiliza el async, solo se usa con el await.
+    // fetch(`${baseUrl}${url}`).then(res => console.log(res.json())); //Esto sirve para lo mismo que lo de abajo, pero aquí no se utiliza el async.
 
     const reponse = await fetch(`${baseUrl}${url}`);//Esto te regresa más directa la información pero son más lineas de código.
     const data = await reponse.json();
@@ -32,4 +33,28 @@ const GetCharactersList = async url =>{
     //console.log(await data.results);
 }
 
+const GetLocationList = async url =>
+{
+    const reponse = await fetch(`${baseUrl}${url}`);
+    const data = await reponse.json();
+    const {results} = data;
+    const locationArr = results.map(element => 
+        {
+            //    console.log(location);
+               const {name,type,dimension} = element;
+               return{locationName: name, locationType: type, locationDimension: dimension};
+        });
+    await locationArr.forEach(element => 
+        {
+            locationList.innerHTML += 
+            `<li>
+                <div>${element.locationName}</div>
+                <ul>
+                   <div>Type: ${element.locationType}</div>
+                   <div>Dimension: ${element.locationDimension}</div>
+                </ul><br>
+            </li>`;
+        });
+}
 GetCharactersList('character');
+GetLocationList('location');
