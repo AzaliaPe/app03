@@ -1,6 +1,7 @@
 const baseUrl = 'https://rickandmortyapi.com/api/';
 const characterList = document.getElementById('characters-list');
 const locationList = document.getElementById('locations-list');
+const episodeTable = document.getElementById('episodes-table');
 
 const GetCharactersList = async url =>{
     // fetch(`${baseUrl}${url}`).then(res => console.log(res.json())); //Esto sirve para lo mismo que lo de abajo, pero aquí no se utiliza el async.
@@ -56,5 +57,27 @@ const GetLocationList = async url =>
             </li>`;
         });
 }
+
+const GetEpisodesTable = async url =>
+{
+    const reponse = await fetch(`${baseUrl}${url}`);
+    const data = await reponse.json();
+    results = data.results;
+    const episodesArr = results.map(element => 
+        {
+               const {episode,air_date,name} = element;
+               return{episodeEpisode: episode, episodeAir_Date: air_date, episodeName: name};
+        });
+    await episodesArr.forEach(element => 
+        {
+            episodeTable.innerHTML += 
+            `<tr>
+            <td>${element.episodeEpisode}</td>
+            <td>${element.episodeName}</td>
+            <td>${element.episodeAir_Date}</td>
+            </tr>`;
+        });
+};
 GetCharactersList('character');
 GetLocationList('location');
+GetEpisodesTable('episode');
